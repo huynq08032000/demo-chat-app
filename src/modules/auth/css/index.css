@@ -1,0 +1,98 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins-Regular&display=swap');
+
+a {
+    color: black;
+    text-decoration: none;
+}
+button:hover{
+    cursor: pointer;
+}
+.container { 
+    height: 100vh;
+    background-image: url("../image/backgroundloginregister.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.container-form { 
+    min-width: 500px;
+    background-color: #f7f7f7;
+    padding: 173px 20px 55px;
+}
+
+.form-header{ 
+    width: 100%;
+    display: block;
+    /* font-family: Poppins-Regular; */
+    font-size: 30px;
+    color: #333;
+    line-height: 1.2;
+    text-align: center;
+}
+
+.form-body, .form-footer{ 
+    padding: 30px;
+}
+
+.input-wrap{
+    margin-bottom: 20px;
+}
+.input-wrap * { 
+    display: block;
+}
+
+.input-wrap .input-label{
+    padding-bottom: 10px;
+}
+.input-wrap input { 
+    min-height: 60px;
+    font-size: 20px;
+    padding: 0 20px;
+    min-width: 400px;
+    border-radius: 5px;
+    border: 1px solid black;
+    background-color: #f7f7f7;
+}
+
+.form-footer .flex{
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+}
+
+.submit-btn{
+    margin-top: 20px;
+}
+
+.submit-btn button{
+    width: 100%;
+    padding: 0 20px;
+    height: 50px;
+    line-height: 1.2;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border : none;
+    border-radius: 10px;
+    background: #6675df;
+    color: #fff;
+    font-size: 12px;
+}
+.submit-btn button:hover{
+    background-color: blue;
+}
+.error-message{ 
+    color: red;
+    padding-top: 5px;
+}
+.direct {
+    text-align: center;
+    padding: 30px;
+}
+.direct a {
+    text-decoration: underline;
+}
+.direct a:hover{
+    color: #6675df;
+}
