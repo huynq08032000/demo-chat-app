@@ -1,3 +1,6 @@
+input{
+    padding: 0;
+}
 .messenger-container{ 
     width: 100%;
     height: 100vh;
@@ -12,9 +15,72 @@
     width: 25%;
     padding: 5px;
     border-right: 1px solid rgb(241, 241, 242);
+    overflow-y: scroll;
 }
 
 .right-container{
     width: 75%;
+    padding: 0 0 20px 0;
+}
+.conversation-container{
+    width: 100%;
+    display: flex;
+}
+.conversation-content {
+    align-items: center;
+    padding: 0 10px;
+    border-radius: 10px;
+    max-width: 30%;
+    width: auto;
+    background-color: #e4e6eb;
+    height: 50px;
+    font-weight: 500;
+    display: flex;
+    margin: 10px 0;
+    word-break: break-word;
+}
+
+.sent{
+    justify-content: flex-end;
+}
+
+.sent .conversation-content{
+    background-color: #0084ff;
+    color: #fff;
+}
+
+.load-message-container{
+    height: calc(100% - 60px);
+    overflow-y: scroll;
+    margin-bottom: 20px;
+    padding: 10px 10px 0 10px;
+}
+.form-send-message-container{
+    display: flex;
+    justify-content: space-between;
+    padding: 0 10px;
+}
+.input-message-waraper{
+    height: 50px;
+    width: 90%;
+}
+
+.input-message-waraper input{
+    font-size: 15px;
     padding: 10px;
+    width: 100%;
+    border-radius: 15px;
+}
+.send-message-btn{
+    width: 50px;
+}
+.send-message-btn button {
+    height: 80%;
+    background-color: #0084ff;
+    width: 100%;
+    border: 1px #fff black;
+    border-radius: 10px;
+}
+button:hover{
+    cursor: pointer;
 }
