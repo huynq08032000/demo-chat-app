@@ -5,7 +5,7 @@ const RightComponent = () =>{
     return (
         <>
             <div className="right-container">
-                RightComponent
+                <h1>Start trial here</h1>
             </div>
         </>
     )

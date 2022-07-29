@@ -2,38 +2,41 @@ import React from "react";
 import '../css/index.css'
 import { auth, db } from "../../../config/firebase";
 import useFirestore from "../../../hooks/useFirestore";
+import { NavLink } from "react-router-dom";
+import { collection, getDocs, where, query, onSnapshot } from 'firebase/firestore'
+import '../css/leftComponent.css'
+import { BrowserRouter } from 'react-router-dom'
 const LeftComponent = () => {
-    // const conversationsCondition = React.useMemo(() => {
-    //     return {
-    //         fieldName: 'users',
-    //         operator: 'array-contains',
-    //         compareValue: auth.currentUser?.email
-    //     }
-    // })
-    // const conversations = useFirestore('messages', conversationsCondition)
-    // React.useEffect(()=>{
-    // },[])
-    // console.log(conversations)
-    const [posts, setPosts] = React.useState([]);
-
-    React.useEffect(() => {
-        try{
-            return db.collection('messages').onSnapshot((snapshot) => {
-                const postData = [];
-                snapshot.forEach((doc) => postData.push({ ...doc.data(), id: doc.id }));
-                setPosts(postData);
+    const [messages, setMessages] = React.useState([])
+    let condition = where("users", "array-contains", auth?.currentUser.email)
+    console.log(auth?.currentUser.email)
+    const loadConversation = async () => {
+        const messages = [{}]
+        const q = await query(collection(db, "messages"), condition);
+        onSnapshot(q, (querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                messages.push({ id: doc.id, name: doc.data().users.filter((name) => { return name !== auth.currentUser.email }) })
             });
-        }
-        catch(error){
-            console.log(error)
-        }
-    }, []);
-
-    console.log(posts);
+            messages.splice(0, 1)
+            setMessages(messages)
+        });
+    }
+    React.useEffect(() => {
+        loadConversation();
+    }, [])
     return (
         <>
             <div className="left-container">
-                LeftComponent
+                {messages.map(({ id, name }) => (
+                    <div className="message-container" key={id}>
+                        <NavLink
+                            to={`/conversation/${id}`}
+                            className={({ isActive }) => (isActive ? "link-active" : "link")}
+                        >
+                            {name}
+                        </NavLink>
+                    </div>
+                ))}
             </div>
         </>
     )
