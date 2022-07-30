@@ -71,7 +71,7 @@ const RegisterForm = (props) => {
                 </div>
                 <div className="form-footer" style={{ paddingTop: '0' }}>
                     <div className="submit-btn">
-                        <button type="submit">Register</button>
+                        <button type="submit" disabled={loading}>Register</button>
                     </div>
                 </div>
             </form>

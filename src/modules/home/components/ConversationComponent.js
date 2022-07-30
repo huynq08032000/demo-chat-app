@@ -45,6 +45,7 @@ const ConversationComponent = () => {
                     .catch(err => console.log(err))
             }
             currentMessage.current.value = "";
+            setMsg("")
         }, [msg])
 
     return (

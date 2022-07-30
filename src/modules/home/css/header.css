@@ -10,12 +10,16 @@
 }
 
 .avatar-container{
+    align-items: center;
+    justify-content: center;
     height: 100%;
-    background-color: #0084ff;
+    display: flex;
     border-radius: 50%;
     width: 60px;
 }
-
+.avatar-container .avatar-name {   
+    font-size: 30px;
+}
 .search-container{
     height: 60px;
     background-color: rgb(241 241 242);
