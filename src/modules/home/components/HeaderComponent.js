@@ -1,7 +1,7 @@
 import React from "react";
 import '../css/header.css'
 import { FaSearch } from "react-icons/fa";
-import { auth } from "../../../config/firebase";
+import { auth, db } from "../../../config/firebase";
 import { useNavigate } from "react-router";
 import { fetchSignInMethodsForEmail } from "firebase/auth"
 import { toast, ToastContainer } from "react-toastify";
@@ -14,6 +14,9 @@ import { Avatar } from "@mui/material";
 import { stringAvatar } from "../utils";
 import TextField from '@mui/material/TextField';
 import SendIcon from '@mui/icons-material/Send';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import { collection, addDoc, getDoc } from "firebase/firestore";
+
 const style = {
     position: 'absolute',
     top: '50%',
@@ -31,6 +34,7 @@ const HeaderComponent = () => {
     const [userEmail, setUserEmail] = React.useState('')
     const [loading, setLoading] = React.useState(false);
     const [open, setOpen] = React.useState(false);
+    const [msg, setMsg] = React.useState('')
     const handleClose = () => setOpen(false);
     const signOut = () => {
         console.log('Signout')
@@ -38,7 +42,7 @@ const HeaderComponent = () => {
         navigate('/')
     }
     const handleSearch = React.useCallback(async (userEmail) => {
-        if (userEmail === '') return;
+        if (userEmail === '' || auth.currentUser.email === userEmail) return;
         setLoading(true)
         try {
             let signInMethods = await fetchSignInMethodsForEmail(auth, userEmail);
@@ -52,8 +56,9 @@ const HeaderComponent = () => {
                     draggable: true,
                     progress: undefined,
                 });
+            } else {
+                setOpen(true)
             }
-            setOpen(true)
         }
         catch (err) {
             toast.error("Địa chỉ email không hợp lệ", {
@@ -68,6 +73,19 @@ const HeaderComponent = () => {
         }
         setLoading(false)
     }, [userEmail])
+
+    const handleSend = () => {
+        if (msg == "") return;
+        handleAddConversation(userEmail, msg)
+    }
+    const handleAddConversation = React.useCallback(async (userEmail, msg) => {
+        const userSend = auth.currentUser.email
+        const docRef = await addDoc(collection(db, "messages"), {
+            content: [{ message: msg, userSend: userSend }],
+            users: [userSend, userEmail]
+        });
+        navigate('/messenger')
+    }, [userEmail, msg])
     return (
         <>
             <div className="header-container">
@@ -92,7 +110,9 @@ const HeaderComponent = () => {
                     </form>
                 </div>
                 <div className="signout-containter">
-                    <button onClick={signOut}>Sign out</button>
+                    <Button variant="contained" startIcon={<ExitToAppIcon/>} sx={{ height: '44px' }}
+                        onClick={signOut}
+                    >Sign out</Button>
                 </div>
             </div>
             <ToastContainer
@@ -116,9 +136,14 @@ const HeaderComponent = () => {
                     <Typography id="modal-modal-title" variant="h6" component="h2">
                         Send to {userEmail}
                     </Typography>
-                    <Typography id="modal-modal-description" sx={{ mt: 2 , display :'flex', justifyContent: 'space-between'}}>
-                        <TextField id="outlined-basic" label="Send your message" multiline variant="outlined" sx={{ width: '70%' }} />
-                        <Button variant="contained" endIcon={<SendIcon />} sx={{height :'44px'}}>
+                    <Typography id="modal-modal-description" sx={{ mt: 2, display: 'flex', justifyContent: 'space-between' }}>
+                        <TextField id="outlined-basic" label="Send your message" multiline variant="outlined" sx={{ width: '70%' }}
+                            onChange={(e) => {
+                                setMsg(e.target.value)
+                            }} />
+                        <Button variant="contained" endIcon={<SendIcon />} sx={{ height: '44px' }}
+                            onClick={handleSend}
+                        >
                             Send
                         </Button>
                     </Typography>

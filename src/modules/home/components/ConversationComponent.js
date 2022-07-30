@@ -27,7 +27,7 @@ const ConversationComponent = () => {
     }
     React.useEffect(() => {
         loadConversation();
-        // bottomRef.current.scrollIntoView({behavior: 'smooth'});
+        bottomRef.current.scrollIntoView({ behavior: 'smooth' });
     }, [param.conversationID])
     const onSubmit = React.useCallback(
         async () => {
@@ -37,7 +37,7 @@ const ConversationComponent = () => {
             }
             const contentRef = doc(db, "messages", param.conversationID)
             const docSnap = await getDoc(contentRef);
-            if(docSnap.exists()) {
+            if (docSnap.exists()) {
                 await updateDoc(contentRef, {
                     content: [...contents, addMsg]
                 })
@@ -45,16 +45,13 @@ const ConversationComponent = () => {
                     .catch(err => console.log(err))
             }
             currentMessage.current.value = "";
+            bottomRef.current.scrollIntoView({ behavior: 'smooth' });
             setMsg("")
         }, [msg])
-
     return (
         <>
             <div className="right-container">
                 <div className="load-message-container">
-                    <h1>ConversationComponent</h1>
-                    ConversationPage
-                    <div>ConversationID : {param.conversationID}</div>
                     {contents.map((i, index) => (
                         <div key={index} className={`conversation-container ${contents[index]?.userSend === auth.currentUser.email ? 'sent' : 'received'}`} >
                             <div className="conversation-content">{contents[index]?.message}</div>
@@ -66,6 +63,7 @@ const ConversationComponent = () => {
                     <form className="form-send-message-container"
                         onSubmit={(e) => {
                             e.preventDefault();
+                            if (!msg) return;
                             onSubmit();
                         }}>
                         <div className="input-message-waraper">

@@ -34,6 +34,15 @@ const RegisterPage = () => {
                 );
             } catch (error) {
             }
+            toast.success("Sucess", {
+                position: "top-right",
+                autoClose: 500,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
             setLoading(false)
         }, []
     );
