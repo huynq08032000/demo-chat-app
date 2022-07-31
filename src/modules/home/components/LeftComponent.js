@@ -28,7 +28,7 @@ const LeftComponent = () => {
     }
     React.useEffect(() => {
         loadConversation();
-    }, [])
+    }, [condition])
     return (
         <>
             <div className="left-container">
