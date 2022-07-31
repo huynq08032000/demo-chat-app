@@ -2,9 +2,10 @@ import React from "react";
 import HeaderComponent from "../components/HeaderComponent";
 import LeftComponent from "../components/LeftComponent";
 import RightComponent from "../components/RightComponent";
+import { auth, db } from "../../../config/firebase";
 import '../css/index.css'
-const MessengerPage = () => {
 
+const MessengerPage = () => {
     return (
         <>
             <div className="messenger-container">

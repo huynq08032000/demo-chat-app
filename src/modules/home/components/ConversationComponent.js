@@ -4,13 +4,16 @@ import '../css/index.css'
 import { auth, db } from "../../../config/firebase";
 import { collection, getDoc, where, query, onSnapshot, doc, updateDoc } from 'firebase/firestore'
 import { TbSend } from "react-icons/tb";
+import { useDispatch, useSelector } from "react-redux";
+import { authStateSelector } from "../../../redux/selector";
 
 const ConversationComponent = () => {
+    const authState = useSelector(authStateSelector)
     const bottomRef = React.useRef(null)
     const currentMessage = React.useRef(null);
     const param = useParams()
     const [contents, setContent] = React.useState([])
-    let condition = where("users", "array-contains", auth.currentUser?.email)
+    let condition = where("users", "array-contains", authState.email)
     const [msg, setMsg] = React.useState('')
     const loadConversation = async () => {
         const contents = [{}]
@@ -33,7 +36,7 @@ const ConversationComponent = () => {
         async () => {
             const addMsg = {
                 message: msg,
-                userSend: auth.currentUser?.email,
+                userSend: authState.email,
             }
             const contentRef = doc(db, "messages", param.conversationID)
             const docSnap = await getDoc(contentRef);

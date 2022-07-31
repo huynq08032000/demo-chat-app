@@ -1,22 +1,29 @@
 import React from "react";
 import '../css/index.css'
-import { auth, db } from "../../../config/firebase";
 import useFirestore from "../../../hooks/useFirestore";
 import { NavLink } from "react-router-dom";
-import { collection, getDocs, where, query, onSnapshot } from 'firebase/firestore'
 import '../css/leftComponent.css'
+import { auth, db } from "../../../config/firebase";
+import { messagesStateSelector } from "../../../redux/selector";
+import { collection, getDocs, where, query, onSnapshot } from 'firebase/firestore'
+import { useDispatch, useSelector } from "react-redux";
+import { setMessagesState } from "../../../redux/actions";
+import { authStateSelector } from "../../../redux/selector";
 const LeftComponent = () => {
     const [messages, setMessages] = React.useState([])
-    let condition = where("users", "array-contains", auth.currentUser?.email)
+    const authCurrentState = useSelector(authStateSelector)
+    const dispatch = useDispatch()
+    let condition = where("users", "array-contains", authCurrentState.email)
     const loadConversation = async () => {
         const messages = [{}]
         const q = await query(collection(db, "messages"), condition);
         onSnapshot(q, (querySnapshot) => {
             querySnapshot.forEach((doc) => {
-                messages.push({ id: doc.id, name: doc.data().users.filter((name) => { return name !== auth.currentUser?.email }) })
+                messages.push({ id: doc.id, name: doc.data().users.filter((name) => { return name !== authCurrentState.email }) })
             });
             messages.splice(0, 1)
             setMessages(messages)
+            dispatch(setMessagesState(messages))
         });
     }
     React.useEffect(() => {

@@ -16,6 +16,8 @@ import TextField from '@mui/material/TextField';
 import SendIcon from '@mui/icons-material/Send';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import { collection, addDoc, getDoc } from "firebase/firestore";
+import { useSelector } from "react-redux";
+import { authStateSelector } from "../../../redux/selector";
 
 const style = {
     position: 'absolute',
@@ -29,7 +31,8 @@ const style = {
     p: 4,
 };
 const HeaderComponent = () => {
-    const nameCurrentUser = auth.currentUser.displayName
+    const authState = useSelector(authStateSelector)
+    const nameCurrentUser = authState.displayName
     const navigate = useNavigate();
     const [userEmail, setUserEmail] = React.useState('')
     const [loading, setLoading] = React.useState(false);
@@ -42,7 +45,7 @@ const HeaderComponent = () => {
         navigate('/')
     }
     const handleSearch = React.useCallback(async (userEmail) => {
-        if (userEmail === '' || auth.currentUser.email === userEmail) return;
+        if (userEmail === '' || authState.email === userEmail) return;
         setLoading(true)
         try {
             let signInMethods = await fetchSignInMethodsForEmail(auth, userEmail);
@@ -79,18 +82,18 @@ const HeaderComponent = () => {
         handleAddConversation(userEmail, msg)
     }
     const handleAddConversation = React.useCallback(async (userEmail, msg) => {
-        const userSend = auth.currentUser.email
+        const userSend = authState.email
         const docRef = await addDoc(collection(db, "messages"), {
             content: [{ message: msg, userSend: userSend }],
             users: [userSend, userEmail]
         });
-        navigate('/messenger')
+        handleClose()
     }, [userEmail, msg])
     return (
         <>
             <div className="header-container">
                 <div className="avatar-container">
-                    <Avatar {...stringAvatar({ nameCurrentUser })} sx={{ width: '60px', height: '100%' }} />
+                    <Avatar {...stringAvatar({nameCurrentUser})} sx={{ width: '60px', height: '100%' }} />
                 </div>
                 <div className="search-container">
                     <form className="search-user-form" style={{ display: 'flex', padding: '12px 16px', width: '100%' }}

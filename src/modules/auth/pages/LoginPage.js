@@ -8,7 +8,10 @@ import { ACCESS_TOKEN_KEY } from "../../../ultils/constants";
 import Cookies from 'js-cookie';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useDispatch } from "react-redux";
+import { setAuthState } from "../../../redux/actions";
 const LoginPage = () => {
+    const dispatch = useDispatch()
     const navigate = useNavigate();
     const [loading, setLoading] = React.useState(false);
     const [errorMessage, setErrorMessage] = React.useState('');
@@ -22,6 +25,11 @@ const LoginPage = () => {
                     values.email,
                     values.password
                 );
+                dispatch(setAuthState({
+                    id : user.user.uid,
+                    email : user.user.email,
+                    displayName : user.user.displayName
+                }))
                 Cookies.set(ACCESS_TOKEN_KEY, user.user.accessToken, { expires: values.rememberMe ? 7 : undefined })
                 navigate('/messenger')
             } catch (error) {
